@@ -4,7 +4,7 @@ End-to-end synthetic monitoring suite built with the [Checkly CLI](https://www.c
 
 ## The Problem This Solves
 
-Infrastructure dashboards report green while real users experience a blank storefront, a broken cart, or a checkout that silently fails. Synthetic checks simulate the user journey continuously from the outside in — the same way a real customer would — and alert before revenue is impacted.
+Infrastructure dashboards report green while real users experience a blank storefront, a broken cart, or a checkout that silently fails. Synthetic checks simulate the user journey continuously from the outside in the same way a real customer would and alert before revenue is impacted.
 
 ---
 

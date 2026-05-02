@@ -1,0 +1,19 @@
+{
+  "name": "checkly-astronomy-shop",
+  "version": "1.0.0",
+  "description": "Synthetic monitoring for the OpenTelemetry Demo Astronomy Shop — built with Checkly CLI",
+  "scripts": {
+    "test": "npx checkly test --verbose",
+    "test:local": "npx checkly test --record",
+    "deploy": "npx checkly deploy --force",
+    "destroy": "npx checkly destroy"
+  },
+  "devDependencies": {
+    "checkly": "^7.12.1",
+    "jiti": "^2.6.1",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

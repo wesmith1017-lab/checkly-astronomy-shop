@@ -1,0 +1,64 @@
+name: Checkly
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  # Point checks at the staging/preview environment URL.
+  # In a real setup, this would be dynamically set to the PR's preview URL
+  # (e.g., Vercel or Netlify deploy URLs). For this demo, it's a fixed value.
+  ENVIRONMENT_URL: ${{ vars.ENVIRONMENT_URL || 'http://localhost:8080' }}
+
+  CHECKLY_API_KEY: ${{ secrets.CHECKLY_API_KEY }}
+  CHECKLY_ACCOUNT_ID: ${{ secrets.CHECKLY_ACCOUNT_ID }}
+
+jobs:
+  test:
+    name: Run Checkly Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # `checkly test` runs all checks against ENVIRONMENT_URL and reports
+      # pass/fail to the PR. This is the "shift-left" story: checks that will
+      # run in production also gate every pull request.
+      - name: Run Checkly tests
+        run: npx checkly test --reporter=github
+
+  deploy:
+    name: Deploy Checks to Checkly
+    runs-on: ubuntu-latest
+    needs: test
+    # Only deploy when merging to main, not on PRs
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # `checkly deploy` syncs your check config to the Checkly platform.
+      # Any changes to check frequency, locations, alert routing, or thresholds
+      # in this repo are reflected in the platform on merge — no manual UI clicks.
+      - name: Deploy checks
+        run: npx checkly deploy --force

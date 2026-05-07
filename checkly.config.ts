@@ -15,7 +15,7 @@ import { defineConfig } from 'checkly'
 export default defineConfig({
   projectName: 'Astronomy Shop — Synthetic Monitoring',
   logicalId: 'astronomy-shop-monitoring',
-  repoUrl: 'https://github.com/YOUR_GITHUB_USERNAME/checkly-astronomy-shop',
+  repoUrl: 'https://github.com/wesmith1017-lab/checkly-astronomy-shop',
 
   checks: {
     activated: true,
@@ -40,8 +40,11 @@ export default defineConfig({
     alertChannels: [],
 
     browserChecks: {
-      // Auto-discover Playwright specs — individual .check.ts files handle
-      // configuration so we can set per-check frequency and alert routing.
+      // Intentionally empty — browser checks are NOT auto-discovered from
+      // spec files here. Each .check.ts file creates its own BrowserCheck
+      // construct with an explicit entrypoint, which gives us per-check
+      // control over frequency, regions, alert routing, and group membership.
+      // Auto-discovery via testMatch would bypass all of that.
       testMatch: [],
     },
   },
